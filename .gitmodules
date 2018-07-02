@@ -1,0 +1,9 @@
+[submodule "external/fmt"]
+	path = external/fmt
+	url = https://github.com/fmtlib/fmt
+[submodule "external/cxxopts"]
+	path = external/cxxopts
+	url = https://github.com/jarro2783/cxxopts
+[submodule "external/sdl2-cmake-scripts"]
+	path = external/sdl2-cmake-scripts
+	url = https://github.com/tcbrindle/sdl2-cmake-scripts
