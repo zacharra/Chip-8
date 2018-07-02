@@ -9,8 +9,16 @@ Note that this implementation still has timing and keybinding issues and is thus
 This project can be compiled with GCC 8.1 and up (on Linux, don't know about Windows/MinGW and OSX). Used to work under Visual Studio when I wrote my initial version but I haven't tested it on Windows yet after rewriting several parts of it recently.
 
 For installation you need CMake and the development files for SDL2, headers and libraries should be visible for CMake.  
-Do not forget to load the submodules for this project after cloning it. Here's a simple way to build the project (assuming you use a Unix shell and have the necessary dependencies installed):
+Do not forget to load the submodules for this project after cloning it. Here's a simple way to build and run the project (assuming you use a Unix shell and have the necessary dependencies installed):
 
+```bash
+git clone --recurse-submodules https://github.com/zacharra/Chip-8
+cd Chip-8
+mkdir build && cd build
+cmake ..
+make
+./sdl/Chip-8
+```
 
 ## License
 This project is licensed under the terms of the [MIT license](LICENSE).
