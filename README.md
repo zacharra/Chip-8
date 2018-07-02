@@ -12,7 +12,7 @@ For installation you need CMake and the development files for SDL2, headers and 
 Do not forget to load the submodules for this project after cloning it. Here's a simple way to build and run the project (assuming you use a Unix shell and have the necessary dependencies installed):
 
 ```bash
-git clone --recurse-submodules https://github.com/zacharra/Chip-8
+git clone --recurse-submodules https://github.com/zacharra/Chip-8.git
 cd Chip-8
 mkdir build && cd build
 cmake ..
