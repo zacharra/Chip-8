@@ -1,14 +1,14 @@
 #include "utils/class_name.h"
+#include <map>
+#include <typeindex>
 
 #if defined(__GNUC__)
 
 #include <cxxabi.h>
 #include <cstdlib>
-#include <map>
 #include <memory>
 #include <stdexcept>
 #include <string>
-#include <typeindex>
 #include "utils/resource_ptr.h"
 
 namespace utils
@@ -47,7 +47,6 @@ static std::string get_class_name_impl(const std::type_info& id)
 
 namespace utils
 {
-
 
 const std::string& get_class_name(const std::type_info& id)
 {

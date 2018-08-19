@@ -35,7 +35,8 @@ private:
 
     static constexpr std::uint16_t max_rom_size = 0x1000 - 0x200;
 
-    static const std::array<InterpreterFn, 16> instructions;
+    static std::array<InterpreterFn, 16> instructions;
+
     std::uint16_t opcode = 0;
     std::uint16_t I = 0;
     std::uint16_t pc = 0x200;

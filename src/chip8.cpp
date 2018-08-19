@@ -24,10 +24,8 @@ static constexpr std::array<std::uint8_t, 80> chip8_fontset = {
     0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-const std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = [] {
-    std::array<InterpreterFn, 16> instructions;
-
-    instructions[0x0] = [](Chip8Cpu& cpu) {
+std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
+    [](Chip8Cpu& cpu) {
         switch (cpu.opcode) {
         // clear screen
         case 0x00E0:
@@ -44,66 +42,66 @@ const std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = [] {
             throw InterpreterException("Instruction 0x0NNN is unsupported");
         }
         cpu.pc += 2;
-    };
+    },
 
     // 1NNN: jump to address NNN
-    instructions[0x1] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) { // 0x1
         cpu.pc = cpu.opcode & 0x0FFF;
-    };
+    },
     
     // 2NNN: call subroutine at address NNN
-    instructions[0x2] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) { // 0x2
         if (cpu.sp == stack_size) {
             throw InterpreterException("Stack overflowed");
         }
         cpu.stack[cpu.sp++] = cpu.pc;
         cpu.pc = cpu.opcode & 0x0FFF;
-    };
+    },
     
     // 3XNN: skip next instruction if VX == NN
-    instructions[0x3] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) { // 0x3
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         if (cpu.V[x] == (cpu.opcode & 0x00FF)) {
             cpu.pc += 2;
         }
         cpu.pc += 2;
-    };
+    },
     
     // 4XNN: skip next instruction if VX != NN
-    instructions[0x4] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         if (cpu.V[x] != (cpu.opcode & 0x00FF)) {
             cpu.pc += 2;
         }
         cpu.pc += 2;
-    };
+    },
     
     
     // 5XY0: skip next instruction if VX == VY
-    instructions[0x5] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         const auto y = (cpu.opcode & 0x00F0) >> 4;
         if (cpu.V[x] == cpu.V[y]) {
             cpu.pc += 2;
         }
         cpu.pc += 2;
-    };
+    },
 
     // 6XNN: set VX to NN
-    instructions[0x6] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         cpu.V[x] = cpu.opcode & 0x00FF;
         cpu.pc += 2;
-    };
+    },
     
     // 7XNN: adds NN to VX
-    instructions[0x7] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         cpu.V[x] += cpu.opcode & 0x00FF;
         cpu.pc += 2;
-    };
+    },
     
-    instructions[0x8] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         const auto y = (cpu.opcode & 0x00F0) >> 4;
         switch (cpu.opcode & 0x000F) {
@@ -144,38 +142,38 @@ const std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = [] {
             throw InterpreterException("Instruction {0:#X} is not a Chip8 opcode", cpu.opcode);
         }
         cpu.pc += 2;
-    };
+    },
     
     // 9XY0: skip next instruction if VX != VY
-    instructions[0x9] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         const auto y = (cpu.opcode & 0x00F0) >> 4;
         if (cpu.V[x] != cpu.V[y]) {
             cpu.pc += 2;
         }
         cpu.pc += 2;
-    };
+    },
 
     // ANNN: set I to address NNN
-    instructions[0xA] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         cpu.I = cpu.opcode & 0x0FFF;
         cpu.pc += 2;
-    };
+    },
     
     // BNNN: jump to address NNN + V0
-    instructions[0xB] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         cpu.pc = cpu.opcode & 0x0FFF;
         cpu.pc += cpu.V[0];
-    };
+    },
 
     // CXNN: store bitwise AND operation of NN and random number in VX
-    instructions[0xC] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto i = (cpu.opcode & 0x0F00) >> 8;
-        cpu.V[i] = (cpu.opcode & 0x00FF) & utils::random<std::uint8_t>();
+        cpu.V[i] = (cpu.opcode & 0x00FF) & utils::random<std::uint16_t>();
         cpu.pc += 2;
-    };
+    },
 
-    instructions[0xD] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto xpos = cpu.V[(cpu.opcode & 0x0F00) >> 8];
         const auto ypos = cpu.V[(cpu.opcode & 0x00F0) >> 4];
         const int height = cpu.opcode & 0x000F;
@@ -195,9 +193,9 @@ const std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = [] {
         
         cpu.flags.draw = true;
         cpu.pc += 2;
-    };
+    },
 
-    instructions[0xE] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         const auto k = cpu.V[x];
         if (k >= keys_size) {
@@ -221,9 +219,9 @@ const std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = [] {
         }
 
         cpu.pc += 2;
-    };
+    },
 
-    instructions[0xF] = [](Chip8Cpu& cpu) {
+    [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         switch (cpu.opcode & 0x00FF) {
         // set VX to the value of the delay timer
@@ -288,10 +286,8 @@ const std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = [] {
             throw InterpreterException("Instruction {0:#X} is not a Chip8 opcode", cpu.opcode);
         }
         cpu.pc += 2;
-    };
-
-    return instructions;
-}();
+    }
+};
 
 Chip8Cpu::Chip8Cpu()
 {
@@ -363,3 +359,4 @@ void Chip8Cpu::count_down()
         --sound_timer;
     }
 }
+
