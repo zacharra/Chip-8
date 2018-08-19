@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <stdexcept>
 #include <chip8/utils/resource_ptr.h>
 
 /**

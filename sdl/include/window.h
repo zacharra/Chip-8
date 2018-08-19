@@ -1,7 +1,7 @@
 #pragma once
 
 #include <chip8/chip8.h>
-#include "sdl.h"
+#include "sdlpp.h"
 
 class Window
 {
