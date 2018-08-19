@@ -6,9 +6,9 @@ The emulator has an SDL frontend for display which can easily be replaced with a
 Note that this implementation still has timing and keybinding issues and is thus incomplete.
 
 ## Installation
-This project can be compiled with GCC 8.1 and up (on Linux, don't know about Windows/MinGW and OSX). Used to work under Visual Studio when I wrote my initial version but I haven't tested it on Windows yet after rewriting several parts of it recently.
+This project can be compiled with GCC 8.1 and up on Linux (don't know about Windows/MinGW and OSX) and with recent versions of Visual Studio 2017 on Windows (tested with v15.8.1).
 
-For installation you need CMake and the development files for SDL2, headers and libraries should be visible for CMake.  
+For installation you need CMake and the development files for SDL2. Headers and libraries should be visible for CMake. 
 Do not forget to load the submodules for this project after cloning it. Here's a simple way to build and run the project (assuming you use a Unix shell and have the necessary dependencies installed):
 
 ```bash
