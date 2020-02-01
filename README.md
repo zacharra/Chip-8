@@ -3,7 +3,7 @@
 Implementation of (yet another) Chip-8 emulator written in C++. For more information regarding the Chip-8 architecture, check out the [Wikipedia page][1] on it.
 The resources most helpful for writing this emulator have been [this][2] page and [Cowgod's technical reference][3].  
 The emulator has an SDL frontend for display which can easily be replaced with any other toolkit (e.g. Qt).  
-Note that this implementation still has timing and keybinding issues and is thus incomplete.
+Note that this implementation still has timing issues and is thus incomplete.
 
 ## Installation
 This project can be compiled with GCC 8.1 and up on Linux (don't know about Windows/MinGW and OSX) and with recent versions of Visual Studio 2017 on Windows (tested with v15.8.1).

@@ -10,9 +10,7 @@ Window::Window(Chip8Cpu& chip8, int width, int height)
     m_canvas = sdl::Texture{sdl::call(SDL_CreateTexture, m_renderer.get(), SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, Chip8Cpu::screen_width, Chip8Cpu::screen_height)};
 }
 
-Window::~Window()
-{
-}
+Window::~Window() = default;
 
 void Window::run()
 {
@@ -21,7 +19,6 @@ void Window::run()
 
     SDL_Event evt;
     StopWatch watch;
-    watch.update();
 
     while (!m_done) {
         while (SDL_PollEvent(&evt)) {
@@ -35,8 +32,8 @@ void Window::run()
                     if (evt.key.keysym.mod & KMOD_LCTRL) {
                 case SDLK_ESCAPE:
                         m_done = true;
+                        break;
                     }
-                    break;
                 case SDLK_RETURN:
                 case SDLK_KP_ENTER:
                     if (evt.key.keysym.mod & KMOD_LALT) {
@@ -47,8 +44,8 @@ void Window::run()
                         int w, h;
                         SDL_GetWindowSize(m_window.get(), &w, &h);
                         sdl::call(SDL_RenderSetLogicalSize, m_renderer.get(), w, h);
+                        break;
                     }
-                    break;
                 default:
                     key_press(evt.key.keysym.sym);
                 }
@@ -56,6 +53,8 @@ void Window::run()
             case SDL_KEYUP:
                 key_release(evt.key.keysym.sym);
                 break;
+            default:
+                ;
             }
         }
 
@@ -86,7 +85,7 @@ void Window::render()
     void* pixels_;
     int pitch;
     sdl::call(SDL_LockTexture, m_canvas.get(), nullptr, &pixels_, &pitch);
-    Uint32* pixels = static_cast<Uint32*>(pixels_);
+    auto pixels = static_cast<Uint32*>(pixels_);
     for (int y = 0; y < Chip8Cpu::screen_height; y++) {
         for (int x = 0; x < Chip8Cpu::screen_width; x++) {
             pixels[y * Chip8Cpu::screen_width + x] = m_chip8.gfx[y][x] ? static_cast<Uint32>(-1) : 0;
@@ -150,6 +149,8 @@ void Window::key_press(int key)
     case SDLK_v:
         keys[0xF] = 1;
         break;
+    default:
+        ;
     }
 }
 
@@ -205,5 +206,7 @@ void Window::key_release(int key)
     case SDLK_v:
         keys[0xF] = 0;
         break;
+    default:
+        ;
     }
 }

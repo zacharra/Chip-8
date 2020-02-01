@@ -21,7 +21,7 @@ public:
     }
 
 private:
-	std::mt19937 m_gen;
+    std::mt19937 m_gen;
     std::uniform_int_distribution<Int> m_dist;
 };
 

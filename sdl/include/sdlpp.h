@@ -1,5 +1,9 @@
 #pragma once
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedStructInspection"
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
 #include <SDL.h>
 #include <stdexcept>
 #include <chip8/utils/resource_ptr.h>
@@ -59,15 +63,14 @@ namespace sdl
     {
     public:
         static Init init;
+        Init(const Init&) = delete;
+        Init &operator=(const Init&) = delete;
     private:
         template <class... Args>
-        Init(Args... args)
+        explicit Init(Args... args)
         {
             call(SDL_Init, args...);
         }
-
-        Init(const Init&) = delete;
-        Init &operator=(const Init&) = delete;
 
         ~Init()
         {
@@ -79,3 +82,5 @@ namespace sdl
     using Renderer = utils::resource_ptr<SDL_Renderer, SDL_DestroyRenderer>;
     using Texture = utils::resource_ptr<SDL_Texture, SDL_DestroyTexture>;
 }
+
+#pragma clang diagnostic pop

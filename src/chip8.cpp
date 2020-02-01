@@ -48,7 +48,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
     [](Chip8Cpu& cpu) { // 0x1
         cpu.pc = cpu.opcode & 0x0FFF;
     },
-    
+
     // 2NNN: call subroutine at address NNN
     [](Chip8Cpu& cpu) { // 0x2
         if (cpu.sp == stack_size) {
@@ -57,7 +57,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         cpu.stack[cpu.sp++] = cpu.pc;
         cpu.pc = cpu.opcode & 0x0FFF;
     },
-    
+
     // 3XNN: skip next instruction if VX == NN
     [](Chip8Cpu& cpu) { // 0x3
         const auto x = (cpu.opcode & 0x0F00) >> 8;
@@ -66,7 +66,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         }
         cpu.pc += 2;
     },
-    
+
     // 4XNN: skip next instruction if VX != NN
     [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
@@ -75,8 +75,8 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         }
         cpu.pc += 2;
     },
-    
-    
+
+
     // 5XY0: skip next instruction if VX == VY
     [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
@@ -93,14 +93,14 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         cpu.V[x] = cpu.opcode & 0x00FF;
         cpu.pc += 2;
     },
-    
+
     // 7XNN: adds NN to VX
     [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         cpu.V[x] += cpu.opcode & 0x00FF;
         cpu.pc += 2;
     },
-    
+
     [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
         const auto y = (cpu.opcode & 0x00F0) >> 4;
@@ -143,7 +143,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         }
         cpu.pc += 2;
     },
-    
+
     // 9XY0: skip next instruction if VX != VY
     [](Chip8Cpu& cpu) {
         const auto x = (cpu.opcode & 0x0F00) >> 8;
@@ -159,7 +159,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         cpu.I = cpu.opcode & 0x0FFF;
         cpu.pc += 2;
     },
-    
+
     // BNNN: jump to address NNN + V0
     [](Chip8Cpu& cpu) {
         cpu.pc = cpu.opcode & 0x0FFF;
@@ -177,7 +177,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
         const auto xpos = cpu.V[(cpu.opcode & 0x0F00) >> 8];
         const auto ypos = cpu.V[(cpu.opcode & 0x00F0) >> 4];
         const int height = cpu.opcode & 0x000F;
-        
+
         cpu.V[0xF] = 0;
         for (int y = 0; y < height; y++) {
             const auto pixel = cpu.memory[cpu.I + y];
@@ -190,7 +190,7 @@ std::array<Chip8Cpu::InterpreterFn, 16> Chip8Cpu::instructions = {
                 }
             }
         }
-        
+
         cpu.flags.draw = true;
         cpu.pc += 2;
     },
@@ -297,11 +297,11 @@ Chip8Cpu::Chip8Cpu()
 void Chip8Cpu::load_rom(const std::filesystem::path& path)
 {
     namespace fs = std::filesystem;
-    
+
     if (!fs::exists(path) || !fs::is_regular_file(path)) {
         throw FileNotFoundException(path.u8string());
     }
-    
+
     std::ifstream ifs(path, std::ios::in | std::ios::binary);
     if (!ifs) {
         throw IOException("Can't read file " + path.u8string());
@@ -350,7 +350,7 @@ void Chip8Cpu::count_down()
     if (delay_timer > 0) {
         --delay_timer;
     }
-    
+
     if (sound_timer > 0) {
         if (sound_timer == 1) {
             fmt::print("BEEP\a");
@@ -359,4 +359,3 @@ void Chip8Cpu::count_down()
         --sound_timer;
     }
 }
-

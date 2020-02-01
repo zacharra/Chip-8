@@ -7,3 +7,5 @@ build/
 .ycm_extra_conf.py
 __pycache__
 /x64
+/cmake-build*
+.idea

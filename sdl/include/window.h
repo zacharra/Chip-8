@@ -24,5 +24,5 @@ private:
     void key_press(int key);
     void key_release(int key);
 
-    bool m_done;
+    bool m_done{};
 };

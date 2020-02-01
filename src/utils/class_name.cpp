@@ -38,7 +38,14 @@ namespace utils
 // else just return the raw name, will show the demangled name when compiled with VC++
 static std::string get_class_name_impl(const std::type_info& id)
 {
-    return id.name();
+    std::string_view name{id.name()};
+
+    auto n = name.find_first_of(' ');
+    if (n != std::string_view::npos) {
+        name = name.substr(n + 1);
+    }
+
+    return std::string{name};
 }
 
 }
